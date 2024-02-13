@@ -27,8 +27,11 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: pnpm-install
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 8.15.1
         if: ${{ steps.node_modules_cache_id.outputs.cache-hit != 'true' }}
-        run: pnpm i
+      - run: pnpm i
 
       - name: app-build
         run: pnpm build
