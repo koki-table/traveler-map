@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "storybook:build ": "storybook build",
     "vrt:snapshot": "storycap --serverCmd \"npx http-server storybook-static -a localhost -p 6006\" http://localhost:6006",
     "vrt:expected": "rimraf .reg/expected && mv __screenshots__ .reg/expected",
     "vrt:run": "reg-suit run",
