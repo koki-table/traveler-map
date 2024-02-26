@@ -37,16 +37,38 @@ const PrefectureMap = ({ prefecture }: { prefecture: string }) => {
       .attr(`width`, `100%`)
       .attr(`height`, `100%`)
 
-    // 都道府県の領域データをpathで描画
+    // 地理データに基づいてクリッピングパスを定義
     svg
+      .append('clipPath')
+      .attr('id', 'map-clip')
       .selectAll(`path`)
       .data(prefectureJson)
       .enter()
       .append(`path`)
-      .attr(`d`, path as any)
+      .attr(`d`, path)
+
+    // クリッピングされた要素用のグループを作成
+    const mapGroup = svg.append('g').attr('clip-path', 'url(#map-clip)')
+
+    // クリップされた領域内に地図を描画
+    mapGroup
+      .selectAll(`path`)
+      .data(prefectureJson)
+      .enter()
+      .append(`path`)
+      .attr(`d`, path)
       .attr(`stroke`, `#666`)
       .attr(`stroke-width`, 0.25)
       .attr(`fill`, color)
+
+    // クリップされた地図上に画像を描画
+    mapGroup
+      .append('svg:image')
+      .attr('x', 250)
+      .attr('y', 50)
+      .attr('width', 200)
+      .attr('height', 204)
+      .attr('xlink:href', 'sample.jpg')
 
       /**
        * 都道府県領域の click イベントハンドラ
