@@ -4,6 +4,7 @@ import React, { useEffect, memo } from 'react'
 import * as d3 from 'd3'
 import geoJson from '@/lib/json/japan.json'
 import { useMounted } from '@/lib/hooks/useMounted'
+import { useRouter } from 'next/navigation'
 
 type List = {
   name: string
@@ -20,6 +21,7 @@ const getTarget = ({ prefName, list }: { prefName: string; list: List[] }): List
 }
 
 const JapanMap = ({ list }: { list: List[] }) => {
+  const router = useRouter()
   const mounted = useMounted()
 
   async function main() {
@@ -75,8 +77,8 @@ const JapanMap = ({ list }: { list: List[] }) => {
       /**
        * 都道府県領域の click イベントハンドラ
        */
-      .on(`click`, function (item: any, target: any) {
-        // クリックイベントを追加したい場合はこちらに記述
+      .on(`click`, function (item: any, target: any) {        
+        router.push(`/${target.properties.name}`)
       })
 
       /**
