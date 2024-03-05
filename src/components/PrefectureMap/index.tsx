@@ -7,8 +7,11 @@ import { useMounted } from '@/lib/hooks/useMounted'
 import { FeatureCollection } from 'geojson'
 import { getPrefectureJson } from './lib'
 
-const PrefectureMap = ({ prefecture }: { prefecture: string }) => {
+const PrefectureMap = ({ prefecture, imageUrl }: { prefecture: string, imageUrl: string | ArrayBuffer | null}) => {
   const mounted = useMounted()
+
+  console.log(imageUrl);
+  
 
   async function main() {
     const width = 500 // 描画サイズ: 幅
