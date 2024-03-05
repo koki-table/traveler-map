@@ -70,3 +70,5 @@ const Dropzone = React.forwardRef<HTMLDivElement, DropzoneProps>(
 )
 
 export default Dropzone
+
+Dropzone.displayName = 'Dropzone'
