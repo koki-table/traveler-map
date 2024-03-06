@@ -5,7 +5,6 @@ import Dropzone from '../ui/dropZone'
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import { FileCheck2Icon } from 'lucide-react'
 import { Button } from '../ui/button'
-import { useState } from 'react'
 
 type FileType = { file: null | File }
 
@@ -50,17 +49,12 @@ const DropZoneForm = ({ onSubmit }: { onSubmit: (data: string | ArrayBuffer | nu
     }
   }
 
-  const [imageUrl, setImageUrl] = useState<string | ArrayBuffer | null>(null)
-
-  console.log(imageUrl)
-
   const fileToBase64: SubmitHandler<FileType> = (e) => {
     if (e === null) return
     const reader = new FileReader()
     reader.readAsDataURL(e.file!)
     reader.onload = () => {
       // base64に変換した結果をstateにセットする
-      setImageUrl(reader.result)
       onSubmit(reader.result)
     }
   }
@@ -99,7 +93,6 @@ const DropZoneForm = ({ onSubmit }: { onSubmit: (data: string | ArrayBuffer | nu
           <Button type='submit'>Salve</Button>
         </form>
       </FormProvider>
-      {imageUrl != null && <img src={String(imageUrl)} alt='Preview' />}
     </>
   )
 }

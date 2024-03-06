@@ -7,11 +7,14 @@ import { useMounted } from '@/lib/hooks/useMounted'
 import { FeatureCollection } from 'geojson'
 import { getPrefectureJson } from './lib'
 
-const PrefectureMap = ({ prefecture, imageUrl }: { prefecture: string, imageUrl: string | ArrayBuffer | null}) => {
+const PrefectureMap = ({
+  prefecture,
+  imageUrl,
+}: {
+  prefecture: string
+  imageUrl: string | ArrayBuffer | null
+}) => {
   const mounted = useMounted()
-
-  console.log(imageUrl);
-  
 
   async function main() {
     const width = 500 // 描画サイズ: 幅
@@ -67,11 +70,11 @@ const PrefectureMap = ({ prefecture, imageUrl }: { prefecture: string, imageUrl:
     // クリップされた地図上に画像を描画
     mapGroup
       .append('svg:image')
-      .attr('x', 250)
-      .attr('y', 50)
-      .attr('width', 200)
-      .attr('height', 204)
-      .attr('xlink:href', 'sample.jpg')
+      .attr('x', 320)
+      .attr('y', 100)
+      .attr('width', 50)
+      .attr('height', 54)
+      .attr('href', imageUrl ? String(imageUrl) : null)
 
       /**
        * 都道府県領域の click イベントハンドラ
@@ -89,7 +92,7 @@ const PrefectureMap = ({ prefecture, imageUrl }: { prefecture: string, imageUrl:
       const target = document.getElementById(`map-container`)
       if (target) target.innerHTML = ''
     }
-  }, [mounted])
+  }, [mounted, imageUrl])
 
   return <div id='map-container' className='w-[500px] h-[500px]' />
 }
