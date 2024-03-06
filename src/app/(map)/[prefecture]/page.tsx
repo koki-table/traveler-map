@@ -1,5 +1,5 @@
-import PrefectureMap from '@/components/PrefectureMap'
+import PrefecturePage from './prefecture-page'
 
 export default async function Page({ params }: { params: { prefecture: string } }) {
-  return <PrefectureMap prefecture={params.prefecture} />
+  return <PrefecturePage params={params} />
 }
