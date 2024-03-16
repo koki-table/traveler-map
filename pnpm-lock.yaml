@@ -20,6 +20,9 @@ dependencies:
   '@types/d3':
     specifier: ^7.4.3
     version: 7.4.3
+  '@types/d3-drag':
+    specifier: ^3.0.7
+    version: 3.0.7
   '@types/geojson':
     specifier: ^7946.0.14
     version: 7946.0.14

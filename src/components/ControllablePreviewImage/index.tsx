@@ -13,7 +13,6 @@ interface NodeData {
 const ControllablePreviewImage: React.FC<{
   imageUrl: string | ArrayBuffer | null
 }> = ({ imageUrl }) => {
-  // const svgRef = useRef({ x: 30, y: 50, fx: null, fy: null })
   const svgRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
@@ -21,22 +20,12 @@ const ControllablePreviewImage: React.FC<{
 
     const svg = d3.select<SVGSVGElement, NodeData[]>(svgRef.current)
 
-    const nodesData: NodeData[] = [
-      // { x: 0, y: 0 },
-      // { x: 100, y: 100 },
-      { x: 200, y: 200 },
-      // { x: 300, y: 300 },
-    ]
+    // デフォルト表示の座標
+    const nodesData: NodeData[] = [{ x: 200, y: 200 }]
 
     const previewImage = svg
       .selectAll<SVGImageElement, NodeData>('image')
       .data(nodesData)
-      // .enter()
-      // .append('image')
-      // // .attr('href', imageUrl ? String(imageUrl) : null)
-      // .attr('href', 'sample.jpg')
-      // .attr('height', 100)
-      // .attr('width', 100)
       .call(
         d3
           .drag<SVGImageElement, NodeData>()
@@ -47,19 +36,19 @@ const ControllablePreviewImage: React.FC<{
 
     const simulation = d3.forceSimulation<NodeData>(nodesData)
 
+    // tick 毎のレイアウト
+    const ticHandler = () => {
+      previewImage.attr('x', (d) => d.x).attr('y', (d) => d.y)
+    }
+
+    // Simulation オブジェクトにノード配列をセットして tick イベントをハンドル開始
+    simulation.on('tick', () => ticHandler())
+
     function dragStarted(event: d3.D3DragEvent<SVGImageElement, NodeData, unknown>, d: NodeData) {
-      console.log('ddd')
-
-      console.log(event)
-
-      console.log(d)
       if (!event.active) simulation.alphaTarget(0.3).restart()
 
       d.fx = d.x
       d.fy = d.y
-
-      // svgRef.current.x = d.fx
-      // svgRef.current.y = d.fy
     }
 
     function dragged(event: d3.D3DragEvent<SVGImageElement, NodeData, unknown>, d: NodeData) {
@@ -73,20 +62,14 @@ const ControllablePreviewImage: React.FC<{
       d.fy = null
     }
 
-    simulation.on('tick', () => {
-      previewImage.attr('x', (d) => d.x).attr('y', (d) => d.y)
-    })
-
     return () => {
       simulation.stop()
     }
   }, [])
 
-  // console.log(svgRef.current.x );
-
   return (
     <svg width={500} height={500} ref={svgRef}>
-      <image width='100px' height={'100px'} href={'sample.jpg'} />
+      <image width='100px' height={'100px'} href={imageUrl ? String(imageUrl) : ''} />
     </svg>
   )
 }
