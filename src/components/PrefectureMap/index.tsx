@@ -7,6 +7,13 @@ import { useMounted } from '@/lib/hooks/useMounted'
 import { FeatureCollection } from 'geojson'
 import { getPrefectureJson } from './lib'
 
+interface NodeData {
+  x: number
+  y: number
+  fx?: number | null
+  fy?: number | null
+}
+
 const PrefectureMap = ({
   prefecture,
   imageUrl,
@@ -70,11 +77,11 @@ const PrefectureMap = ({
     // クリップされた地図上に画像を描画
     mapGroup
       .append('svg:image')
+      .attr('href', imageUrl ? String(imageUrl) : null)
       .attr('x', 320)
       .attr('y', 100)
       .attr('width', 50)
       .attr('height', 54)
-      .attr('href', imageUrl ? String(imageUrl) : null)
 
       /**
        * 都道府県領域の click イベントハンドラ
@@ -82,6 +89,26 @@ const PrefectureMap = ({
       .on(`click`, function (item: any, target: any) {
         // クリックイベントを追加したい場合はこちらに記述
       })
+
+    //ドラッグスタート時に呼び出される関数
+    function dragStarted() {
+      console.log('fff')
+      // 処理を記載
+    }
+
+    //ドラッグ中に呼び出される関数
+    function dragged() {
+      // 処理を記載
+    }
+
+    //ドラッグ終了時に呼び出される関数
+    function dragended() {
+      // 処理を記載
+    }
+
+    const sample = d3
+      .selectAll<SVGElement, unknown>('.node')
+      .call(d3.drag<SVGElement, unknown>().on('start', dragStarted))
   }
 
   useEffect(() => {
@@ -94,7 +121,11 @@ const PrefectureMap = ({
     }
   }, [mounted, imageUrl])
 
-  return <div id='map-container' className='w-[500px] h-[500px]' />
+  return (
+    <div id='map-container' className='w-[500px] h-[500px]'>
+      <div className='img'></div>
+    </div>
+  )
 }
 
 export default memo(PrefectureMap)
