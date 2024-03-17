@@ -3,8 +3,8 @@
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import Dropzone from '../ui/dropZone'
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form'
-import { FileCheck2Icon } from 'lucide-react'
-import { Button } from '../ui/button'
+// import { FileCheck2Icon } from 'lucide-react'
+// import { Button } from '../ui/button'
 
 type FileType = { file: null | File }
 
@@ -12,7 +12,13 @@ const defaultValues: FileType = {
   file: null,
 }
 
-const DropZoneForm = ({ onSubmit }: { onSubmit: (data: string | ArrayBuffer | null) => void }) => {
+const DropZoneForm = ({
+  onSubmit,
+  currentPrefecture
+}: {
+  onSubmit: (data: string | ArrayBuffer | null, currentPrefecture: string) => void
+  currentPrefecture: string
+}) => {
   const methods = useForm<FileType>({
     defaultValues,
     shouldFocusError: true,
@@ -37,8 +43,11 @@ const DropZoneForm = ({ onSubmit }: { onSubmit: (data: string | ArrayBuffer | nu
           type: 'typeError',
         })
       } else {
-        methods.setValue('file', acceptedFiles[0])
+        // DropZone に指定した時点で、base64にする
+        fileToBase64(acceptedFiles[0])
         methods.clearErrors('file')
+
+        // methods.setValue('file', acceptedFiles[0])
       }
     } else {
       methods.setValue('file', null)
@@ -49,13 +58,24 @@ const DropZoneForm = ({ onSubmit }: { onSubmit: (data: string | ArrayBuffer | nu
     }
   }
 
-  const fileToBase64: SubmitHandler<FileType> = (e) => {
-    if (e === null) return
+  // onSubmit 使用時に使う
+  // const fileToBase64: SubmitHandler<FileType> = (e) => {
+  //   if (e === null) return
+  //   const reader = new FileReader()
+  //   reader.readAsDataURL(e.file!)
+  //   reader.onload = () => {
+  //     // base64に変換した結果をstateにセットする
+  //     onSubmit(reader.result)
+  //   }
+  // }
+
+  const fileToBase64 = (file: File) => {
+    if (file === null) return
     const reader = new FileReader()
-    reader.readAsDataURL(e.file!)
+    reader.readAsDataURL(file)
     reader.onload = () => {
       // base64に変換した結果をstateにセットする
-      onSubmit(reader.result)
+      onSubmit(reader.result, currentPrefecture)
     }
   }
 
@@ -64,7 +84,7 @@ const DropZoneForm = ({ onSubmit }: { onSubmit: (data: string | ArrayBuffer | nu
       <FormProvider {...methods}>
         <form
           className='flex flex-col items-center justify-center w-100 gap-2'
-          onSubmit={methods.handleSubmit(fileToBase64)}
+          // onSubmit={methods.handleSubmit(fileToBase64)}
           noValidate
           autoComplete='off'
         >
@@ -84,13 +104,13 @@ const DropZoneForm = ({ onSubmit }: { onSubmit: (data: string | ArrayBuffer | nu
               </FormItem>
             )}
           />
-          {methods.watch('file') && (
+          {/* {methods.watch('file') && (
             <div className='flex items-center justify-center gap-3 p-4 relative'>
               <FileCheck2Icon className='h-4 w-4' />
               <p className='text-sm font-medium'>{methods.watch('file')?.name}</p>
             </div>
           )}
-          <Button type='submit'>Salve</Button>
+          <Button type='submit'>Salve</Button> */}
         </form>
       </FormProvider>
     </>
