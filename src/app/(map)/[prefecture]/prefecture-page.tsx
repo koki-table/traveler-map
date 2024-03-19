@@ -16,6 +16,7 @@ export default function PrefecturePage({ params }: { params: { prefecture: strin
         <PrefectureMap
           prefecture={params.prefecture}
           imageUrl={PrefectureState.definitionImageUrl}
+          imageParameters={PrefectureState.previewImageParameters}
         />
       )}
     </>

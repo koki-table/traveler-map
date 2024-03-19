@@ -1,7 +1,13 @@
 'use client'
 
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useCallback } from 'react'
 import * as d3 from 'd3'
+import { Button } from '../ui/button'
+import {
+  previewImageParametersType,
+  usePrefectureContext,
+} from '@/features/prefecture/contexts/PrefectureContext'
+import { useRouter } from 'next/navigation'
 
 interface NodeData {
   x: number
@@ -12,8 +18,19 @@ interface NodeData {
 
 const ControllablePreviewImage: React.FC<{
   imageUrl: string | ArrayBuffer | null
-}> = ({ imageUrl }) => {
+  prefecture: string
+}> = ({ imageUrl, prefecture }) => {
+  const router = useRouter()
+
   const svgRef = useRef<SVGSVGElement>(null)
+  const imageParametersRef = useRef<previewImageParametersType>({
+    x: 0,
+    y: 0,
+    width: 250,
+    height: 250,
+  })
+
+  const { PrefectureAction, PrefectureState } = usePrefectureContext()
 
   useEffect(() => {
     if (!svgRef.current) return
@@ -60,6 +77,9 @@ const ControllablePreviewImage: React.FC<{
       if (!event.active) simulation.alphaTarget(0)
       d.fx = null
       d.fy = null
+
+      imageParametersRef.current.x = event.x
+      imageParametersRef.current.y = event.y
     }
 
     return () => {
@@ -67,10 +87,18 @@ const ControllablePreviewImage: React.FC<{
     }
   }, [])
 
+  const onSubmit = useCallback(() => {
+    PrefectureAction.onConfirmImage(PrefectureState.previewImageUrl, imageParametersRef.current)
+    router.push(`/${prefecture}`)
+  }, [])
+
   return (
-    <svg width={500} height={500} ref={svgRef}>
-      <image width='100px' height={'100px'} href={imageUrl ? String(imageUrl) : ''} />
-    </svg>
+    <>
+      <svg width={500} height={500} ref={svgRef}>
+        <image width='250px' height={'250px'} href={imageUrl ? String(imageUrl) : ''} />
+      </svg>
+      <Button onClick={onSubmit}>Salve</Button>
+    </>
   )
 }
 

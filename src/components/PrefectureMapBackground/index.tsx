@@ -6,7 +6,6 @@ import geoJson from '@/lib/json/japan.json'
 import { useMounted } from '@/lib/hooks/useMounted'
 import { FeatureCollection } from 'geojson'
 import { getPrefectureJson } from './lib'
-import { previewImageParametersType } from '@/features/prefecture/contexts/PrefectureContext'
 
 interface NodeData {
   x: number
@@ -15,14 +14,12 @@ interface NodeData {
   fy?: number | null
 }
 
-const PrefectureMap = ({
+const PrefectureMapBackground = ({
   prefecture,
   imageUrl,
-  imageParameters
 }: {
   prefecture: string
   imageUrl: string | ArrayBuffer | null
-  imageParameters: previewImageParametersType
 }) => {
   const mounted = useMounted()
 
@@ -31,7 +28,7 @@ const PrefectureMap = ({
     const height = 500 // 描画サイズ: 高さ
     const centerPos: [number, number] = [137.0, 38.2] // 地図のセンター位置
     const scale = 1000 // 地図のスケール
-    const color = '#2566CC' // 地図の色
+    const color = 'rgba(37, 102, 204, 0.3)' // 地図の色
 
     const prefectureJson = getPrefectureJson(geoJson as FeatureCollection, prefecture)
 
@@ -74,17 +71,8 @@ const PrefectureMap = ({
       .append(`path`)
       .attr(`d`, path)
       .attr(`stroke`, `#666`)
-      .attr(`stroke-width`, 0.25)
+      .attr(`stroke-width`, 2)
       .attr(`fill`, color)
-
-    // クリップされた地図上に画像を描画
-    mapGroup
-      .append('svg:image')
-      .attr('href', imageUrl ? String(imageUrl) : null)
-      .attr('x', imageParameters.x)
-      .attr('y', imageParameters.y)
-      .attr('width', imageParameters.width)
-      .attr('height', imageParameters.height)
 
       /**
        * 都道府県領域の click イベントハンドラ
@@ -111,4 +99,4 @@ const PrefectureMap = ({
   )
 }
 
-export default memo(PrefectureMap)
+export default memo(PrefectureMapBackground)
