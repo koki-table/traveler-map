@@ -78,7 +78,7 @@ const JapanMap = ({ list }: { list: List[] }) => {
        * 都道府県領域の click イベントハンドラ
        */
       .on(`click`, function (item: any, target: any) {        
-        router.push(`/${target.properties.name}`)
+        router.push(`/${target.properties.name}/upload`)
       })
 
       /**

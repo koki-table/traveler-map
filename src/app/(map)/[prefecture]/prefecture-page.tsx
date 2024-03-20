@@ -1,22 +1,24 @@
 'use client'
 
-import ControllablePreviewImage from '@/components/ControllablePreviewImage'
-import DropZoneForm from '@/components/DropZoneForm'
 import PrefectureMap from '@/components/PrefectureMap'
-import { useState } from 'react'
+import { usePrefectureContext } from '@/features/prefecture/contexts/PrefectureContext'
+import { useRouter } from 'next/navigation'
 
 export default function PrefecturePage({ params }: { params: { prefecture: string } }) {
-  const [imageUrl, setImageUrl] = useState<string | ArrayBuffer | null>(null)
+  const router = useRouter()
 
-  const onSubmit = (e: string | ArrayBuffer | null) => {
-    setImageUrl(e)
-  }
+  // context
+  const { PrefectureState } = usePrefectureContext()
 
   return (
     <>
-      <PrefectureMap prefecture={params.prefecture} imageUrl={imageUrl} />
-      <ControllablePreviewImage imageUrl={imageUrl} />
-      <DropZoneForm onSubmit={onSubmit} />
+      {PrefectureState.definitionImageUrl && (
+        <PrefectureMap
+          prefecture={params.prefecture}
+          imageUrl={PrefectureState.definitionImageUrl}
+          imageParameters={PrefectureState.previewImageParameters}
+        />
+      )}
     </>
   )
 }
