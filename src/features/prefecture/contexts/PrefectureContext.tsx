@@ -88,7 +88,7 @@ export const PrefectureContextProvider = ({
 
       router.push(`/${currentPrefecture}/editor`)
     },
-    [],
+    [router],
   )
 
   const onConfirmImage = useCallback(

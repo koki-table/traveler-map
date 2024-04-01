@@ -5,39 +5,32 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
-  schemas   = ["public", "auth"]
 }
 
-// 1. 都道府県情報を格納するテーブル
+model User {
+  id              Int               @id @default(autoincrement())
+  prefectureImage PrefectureImage[]
+}
+
 model Prefecture {
-  prefecture_id Int @id @default(autoincrement()) // @id属性でプライマリキーに指定 @default(autoincrement())を使用して自動増分に設定
-
-  prefecture_name String @db.VarChar(100) // データベースには最大100文字
-
-  PrefectureImage PrefectureImage[] // 1対多の関連フィールドで、Prefectureに複数のPrefectureImageインスタンスが関連付けられていることを示す
-
-  @@schema("auth")
+  id              Int               @id @default(autoincrement())
+  name            String   @db.VarChar(20)
+  prefectureImage PrefectureImage[]
 }
 
-// 2. 画像URLを格納し、都道府県と紐付けるテーブル
 model PrefectureImage {
-  user_id String @map("user_id") // Assuming Prisma uses String for UUID
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int        @unique
+  prefecture   Prefecture @relation(fields: [prefectureId], references: [id])
+  prefectureId Int        @unique
 
-  prefecture_id Int
-
-  image_url String @db.Text // データベースでは@db.Text属性を使用してテキストとして保存
-
-  prefecture Prefecture @relation(fields: [prefecture_id], references: [prefecture_id]) // PrefectureImageインスタンスをそれぞれの都道府県に基づいて関連付け
-
-  @@id([user_id, prefecture_id]) // user_idとprefecture_idの組み合わせが、PrefectureImageの複合主キーとして指定
-
-  @@schema("auth")
+  @@id([userId, prefectureId])
+  @@index([userId, prefectureId])
 }
