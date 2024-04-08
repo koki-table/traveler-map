@@ -1,5 +1,6 @@
 import { createContext, useContext, ReactNode, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { PrismaClient } from '@prisma/client'
 
 /**
  * state
@@ -22,12 +23,12 @@ const initialPrefectureContextState = (): PrefectureContextState => ({
   isLoading: true,
   previewImageUrl: null,
   definitionImageUrl: null,
-  previewImageParameters:{
+  previewImageParameters: {
     x: 0,
     y: 0,
     width: 250,
     height: 250,
-  }
+  },
 })
 
 /**
@@ -70,6 +71,7 @@ export const PrefectureContextProvider = ({
   defaultState = initialPrefectureContextState(),
 }: PrefectureProviderProps) => {
   const router = useRouter()
+  const prisma = new PrismaClient()
 
   // state
   const [isLoading, setIsLoading] = useState<boolean>(defaultState?.isLoading)
@@ -88,7 +90,7 @@ export const PrefectureContextProvider = ({
 
       router.push(`/${currentPrefecture}/editor`)
     },
-    [],
+    [router],
   )
 
   const onConfirmImage = useCallback(
