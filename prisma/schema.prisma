@@ -17,12 +17,17 @@ datasource db {
 model User {
   id              Int               @id @default(autoincrement())
   prefectureImage PrefectureImage[]
+
+  @@map(name: "users")
 }
 
 model Prefecture {
   id              Int               @id @default(autoincrement())
   name            String   @db.VarChar(20)
   prefectureImage PrefectureImage[]
+
+  @@map(name: "prefectures")
+
 }
 
 model PrefectureImage {
@@ -33,4 +38,7 @@ model PrefectureImage {
 
   @@id([userId, prefectureId])
   @@index([userId, prefectureId])
+
+  @@map(name: "prefectureImages")
+
 }
