@@ -8,6 +8,8 @@ import {
   usePrefectureContext,
 } from '@/features/prefecture/contexts/PrefectureContext'
 import { useRouter } from 'next/navigation'
+import { useMutation } from '@tanstack/react-query'
+import axios from 'axios'
 
 interface NodeData {
   x: number
@@ -87,10 +89,21 @@ const ControllablePreviewImage: React.FC<{
     }
   }, [])
 
+  type prefecture = {
+    name: string
+  }
+  const mutation = useMutation({
+    mutationFn: (prefectureName: prefecture) => {
+      return axios.post('/api/prefecture', prefectureName)
+    },
+  })
+
   const onSubmit = useCallback(() => {
+    mutation.mutate({ name: 'sample' })
+
     PrefectureAction.onConfirmImage(PrefectureState.previewImageUrl, imageParametersRef.current)
     router.push(`/${prefecture}`)
-  }, [])
+  }, [PrefectureAction, PrefectureState.previewImageUrl, mutation, prefecture, router])
 
   return (
     <>
