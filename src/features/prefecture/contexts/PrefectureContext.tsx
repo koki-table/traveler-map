@@ -1,6 +1,5 @@
 import { createContext, useContext, ReactNode, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { PrismaClient } from '@prisma/client'
 
 /**
  * state
@@ -71,7 +70,6 @@ export const PrefectureContextProvider = ({
   defaultState = initialPrefectureContextState(),
 }: PrefectureProviderProps) => {
   const router = useRouter()
-  const prisma = new PrismaClient()
 
   // state
   const [isLoading, setIsLoading] = useState<boolean>(defaultState?.isLoading)
