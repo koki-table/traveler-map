@@ -38,5 +38,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: prisma
+        run: npx prisma generate
+
       - name: app-build
         run: pnpm build
