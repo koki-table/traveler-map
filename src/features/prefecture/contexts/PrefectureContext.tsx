@@ -42,6 +42,7 @@ export const initPrefectureContextAction = (): PrefectureContextAction => ({
   onConfirmImage: () => {},
 })
 
+
 /**
  * context
  */
