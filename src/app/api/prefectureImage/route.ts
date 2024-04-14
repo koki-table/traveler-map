@@ -1,7 +1,7 @@
 import { db } from '@/lib/db'
 import { z } from 'zod'
 import { Prisma } from '@prisma/client'
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/utils/supabase/client'
 import { UserResponse } from '@supabase/supabase-js'
 
 const postCreateSchema = z.object({
@@ -24,7 +24,7 @@ const BucketName = 'prefectureImages'
  */
 async function uploadFile(file: File, user: UserResponse) {
   const filePath = generateFilePath(file, user)
-  
+
   const { error } = await supabase.storage.from(BucketName).upload(filePath, file)
   if (error) {
     return new Response(JSON.stringify(error), { status: 400 })

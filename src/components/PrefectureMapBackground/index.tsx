@@ -23,74 +23,73 @@ const PrefectureMapBackground = ({
 }) => {
   const mounted = useMounted()
 
-  async function main() {
-    const width = 500 // 描画サイズ: 幅
-    const height = 500 // 描画サイズ: 高さ
-    const centerPos: [number, number] = [137.0, 38.2] // 地図のセンター位置
-    const scale = 1000 // 地図のスケール
-    const color = 'rgba(37, 102, 204, 0.3)' // 地図の色
-
-    const prefectureJson = getPrefectureJson(geoJson as FeatureCollection, prefecture)
-
-    // 地図設定
-    const projection = d3
-      .geoMercator()
-      .center(centerPos)
-      .translate([width / 2, height / 2])
-      .scale(scale)
-
-    // 地図をpathに投影(変換)
-    const path = d3.geoPath().projection(projection)
-
-    // SVG要素を追加
-    const svg = d3
-      .select(`#map-container`)
-      .append(`svg`)
-      .attr(`viewBox`, `0 0 ${width} ${height}`)
-      .attr(`width`, `100%`)
-      .attr(`height`, `100%`)
-
-    // 地理データに基づいてクリッピングパスを定義
-    svg
-      .append('clipPath')
-      .attr('id', 'map-clip')
-      .selectAll(`path`)
-      .data(prefectureJson)
-      .enter()
-      .append(`path`)
-      .attr(`d`, path)
-
-    // クリッピングされた要素用のグループを作成
-    const mapGroup = svg.append('g').attr('clip-path', 'url(#map-clip)')
-
-    // クリップされた領域内に地図を描画
-    mapGroup
-      .selectAll(`path`)
-      .data(prefectureJson)
-      .enter()
-      .append(`path`)
-      .attr(`d`, path)
-      .attr(`stroke`, `#666`)
-      .attr(`stroke-width`, 2)
-      .attr(`fill`, color)
-
-      /**
-       * 都道府県領域の click イベントハンドラ
-       */
-      .on(`click`, function (item: any, target: any) {
-        // クリックイベントを追加したい場合はこちらに記述
-      })
-  }
-
   useEffect(() => {
     ;(async () => {
+      function main() {
+        const width = 500 // 描画サイズ: 幅
+        const height = 500 // 描画サイズ: 高さ
+        const centerPos: [number, number] = [137.0, 38.2] // 地図のセンター位置
+        const scale = 1000 // 地図のスケール
+        const color = 'rgba(37, 102, 204, 0.3)' // 地図の色
+
+        const prefectureJson = getPrefectureJson(geoJson as FeatureCollection, prefecture)
+
+        // 地図設定
+        const projection = d3
+          .geoMercator()
+          .center(centerPos)
+          .translate([width / 2, height / 2])
+          .scale(scale)
+
+        // 地図をpathに投影(変換)
+        const path = d3.geoPath().projection(projection)
+
+        // SVG要素を追加
+        const svg = d3
+          .select(`#map-container`)
+          .append(`svg`)
+          .attr(`viewBox`, `0 0 ${width} ${height}`)
+          .attr(`width`, `100%`)
+          .attr(`height`, `100%`)
+
+        // 地理データに基づいてクリッピングパスを定義
+        svg
+          .append('clipPath')
+          .attr('id', 'map-clip')
+          .selectAll(`path`)
+          .data(prefectureJson)
+          .enter()
+          .append(`path`)
+          .attr(`d`, path)
+
+        // クリッピングされた要素用のグループを作成
+        const mapGroup = svg.append('g').attr('clip-path', 'url(#map-clip)')
+
+        // クリップされた領域内に地図を描画
+        mapGroup
+          .selectAll(`path`)
+          .data(prefectureJson)
+          .enter()
+          .append(`path`)
+          .attr(`d`, path)
+          .attr(`stroke`, `#666`)
+          .attr(`stroke-width`, 2)
+          .attr(`fill`, color)
+
+          /**
+           * 都道府県領域の click イベントハンドラ
+           */
+          .on(`click`, function (item: any, target: any) {
+            // クリックイベントを追加したい場合はこちらに記述
+          })
+      }
       if (mounted) await main()
     })()
     return () => {
       const target = document.getElementById(`map-container`)
       if (target) target.innerHTML = ''
     }
-  }, [mounted, imageUrl])
+  }, [mounted, imageUrl, prefecture])
 
   return (
     <div id='map-container' className='w-[500px] h-[500px]'>
