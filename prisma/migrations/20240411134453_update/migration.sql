@@ -17,6 +17,11 @@ CREATE TABLE "prefectures" (
 CREATE TABLE "prefectureImages" (
     "userId" INTEGER NOT NULL,
     "prefectureId" INTEGER NOT NULL,
+    "fileName" VARCHAR(255) NOT NULL DEFAULT '',
+    "contentType" TEXT NOT NULL,
+    "fileSize" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "prefectureImages_pkey" PRIMARY KEY ("userId","prefectureId")
 );

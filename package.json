@@ -13,7 +13,8 @@
     "vrt:expected": "rimraf .reg/expected && mv __screenshots__ .reg/expected",
     "vrt:run": "reg-suit run",
     "vrt:serve": "npx http-server .reg -o -p 8080",
-    "prisma:migrate": "npx prisma migrate dev --name"
+    "prisma:migrate": "npx prisma migrate dev --name",
+    "prisma:generate": "npx prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
