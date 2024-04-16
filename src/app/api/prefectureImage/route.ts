@@ -1,7 +1,9 @@
 import { db } from '@/lib/db'
 import { z } from 'zod'
 import { Prisma } from '@prisma/client'
-import { createClient } from '@/utils/supabase/storage'
+import { createClient as storageCreateClient } from '@/utils/supabase/storage'
+import { createClient as serverCreateClient } from '@/utils/supabase/server'
+
 import { UserResponse } from '@supabase/supabase-js'
 
 const postCreateSchema = z.object({
@@ -11,7 +13,8 @@ const postCreateSchema = z.object({
 })
 
 // supabase 初期化 (storage用)
-const supabase = createClient()
+const supabase = storageCreateClient()
+const serverSupabase = serverCreateClient()
 
 /**
  * const
@@ -51,7 +54,7 @@ export async function POST(req: Request) {
       new Response(JSON.stringify(error), { status: 400 })
     }
 
-    const user = await supabase.auth.getUser()
+    const user = await serverSupabase.auth.getUser()
 
     // storage に保存
     await uploadFile(body.file, user)
