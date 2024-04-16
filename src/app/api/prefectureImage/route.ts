@@ -10,7 +10,7 @@ const postCreateSchema = z.object({
   prefectureId: z.number(),
 })
 
-// supabase 初期化 (server側用)
+// supabase 初期化 (client側用)
 const supabase = createClient()
 
 /**
@@ -60,7 +60,10 @@ export async function POST(req: Request) {
     const filePath = generateFilePath(body.file, user)
 
     // db に保存
-    const data = {
+    /**
+     * @see https://www.prisma.io/docs/orm/prisma-client/type-safety#generated-uncheckedinput-types
+     */
+    const data: Prisma.PrefectureImageUncheckedCreateInput = {
       imageUrl: filePath,
       contentType: body.file.type,
       fileSize: body.file.size,
