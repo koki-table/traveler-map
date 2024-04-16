@@ -3,7 +3,6 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -35,6 +34,11 @@ model PrefectureImage {
   userId       Int        @unique
   prefecture   Prefecture @relation(fields: [prefectureId], references: [id])
   prefectureId Int        @unique
+  imageUrl    String      @db.VarChar(255)
+  contentType String
+  fileSize    Int
+  createdAt   DateTime?    @default(now())
+  updatedAt   DateTime?    @updatedAt
 
   @@id([userId, prefectureId])
   @@index([userId, prefectureId])

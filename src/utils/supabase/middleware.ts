@@ -1,6 +1,9 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+/**
+ * @see https://supabase.com/docs/guides/auth/server-side/nextjs
+ */
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
     request: {
