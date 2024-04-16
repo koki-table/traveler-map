@@ -1,7 +1,7 @@
 import { db } from '@/lib/db'
 import { z } from 'zod'
 import { Prisma } from '@prisma/client'
-import { createClient } from '@/utils/supabase/client'
+import { createClient } from '@/utils/supabase/storage'
 import { UserResponse } from '@supabase/supabase-js'
 
 const postCreateSchema = z.object({
@@ -10,7 +10,7 @@ const postCreateSchema = z.object({
   prefectureId: z.number(),
 })
 
-// supabase 初期化 (client側用)
+// supabase 初期化 (storage用)
 const supabase = createClient()
 
 /**
